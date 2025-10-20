@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设计学校田径运动会比赛场地</title>
+    <!-- 替换为无版权抒情纯音乐 -->
+    <audio id="backgroundMusic" loop autoplay>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 统一的 Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#1e40af',
+                        secondary: '#3b82f6',
+                        accent: '#f97316',
+                        dark: '#1e293b',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-in-out',
+                        'zoom-in': 'zoomIn 1s ease-out',
+                        'pulse-fast': 'pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        zoomIn: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .text-shadow {
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            }
+            .text-shadow-lg {
+                text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.7);
+            }
+            .text-shadow-glow {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
+            }
+            .bg-overlay {
+                background-color: rgba(0, 0, 0, 0.4);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .gradient-text {
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                background-image: linear-gradient(45deg, #f97316, #fbbf24, #3b82f6, #8b5cf6);
+                background-size: 400% 400%;
+                animation: gradientAnimation 8s ease infinite;
+            }
+            @keyframes gradientAnimation {
+                0% { background-position: 0% 50%; }
+                50% { background-position: 100% 50%; }
+                100% { background-position: 0% 50%; }
+            }
+        }
+    </style>
+    <style>
+        body {
+            background-image: url('https://p3-flow-imagex-download-sign.byteimg.com/tos-cn-i-a9rns2rl98/b76e13a7b7ca44d3a97f79b68778e033.jpg~tplv-a9rns2rl98-24:720:720.image?rcl=202510200046280BADD217D03CD541B225&rk3s=8e244e95&rrcfp=8a172a1a&x-expires=1761497189&x-signature=tbgU9xS49uv8G6tSXGT%2FgqXGGtg%3D');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 开场动画屏幕 */
+        #opening-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease-out, visibility 1s ease-out;
+        }
+        
+        .countdown {
+            font-size: 8rem;
+            font-weight: bold;
+            color: white;
+            opacity: 0;
+            transform: scale(0.5);
+            animation: countdownAnimation 1s ease-in-out forwards;
+        }
+        
+        @keyframes countdownAnimation {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(1); }
+        }
+        
+        .sports-icon {
+            font-size: 6rem;
+            color: white;
+            margin: 2rem 0;
+            animation: floatAnimation 2s ease-in-out infinite;
+        }
+        
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.7);
+            animation: particleAnimation 3s ease-in-out infinite;
+        }
+        
+        @keyframes particleAnimation {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .title-reveal {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .subtitle-reveal {
+            font-size: 1.5rem;
+            color: white;
+            margin-top: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out 0.3s, transform 0.8s ease-out 0.3s;
+        }
+        
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 2rem;
+            animation: bounce 2s infinite;
+            opacity: 0;
+            transition: opacity 0.5s ease-out 1.5s;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+            40% { transform: translateY(-20px) translateX(-50%); }
+            60% { transform: translateY(-10px) translateX(-50%); }
+        }
+        
+        /* 其他样式保持不变 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 800px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {opacity: 0; transform: translateY(-50px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-btn:hover {
+            color: #000;
+        }
+        
+        .formula {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+        
+        .track-lane {
+            height: 40px;
+            margin: 5px 0;
+            position: relative;
+            border-left: 2px solid #000;
+            border-right: 2px solid #000;
+        }
+        
+        .track-lane::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+        }
+        
+        .track-lane::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #000;
+        }
+        
+        .start-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: #e63946;
+            z-index: 10;
+        }
+        
+        .staggered-start {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #fb8500;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body class="font-sans text-light">
+    <!-- 开场动画屏幕 -->
+    <div id="opening-screen">
+        <div id="countdown" class="countdown"></div>
+        <div class="sports-icon">
+            <i class="fa fa-trophy"></i>
+        </div>
+        <h1 id="opening-title" class="title-reveal">设计学校田径运动会比赛场地</h1>
+        <p id="opening-subtitle" class="subtitle-reveal">探索田径比赛中的科学与技术</p>
+        <div class="scroll-indicator">
+            <i class="fa fa fa fa-angle-down"></i>
+        </div>
+    </div>
+
+    <!-- 页面标题 -->
+    <header class="bg-overlay py-12 px-4 text-center">
+        <h1 class="text-4xl md:text-6xl font-bold text-shadow-lg mb-4 animate-fade-in">设计学校田径运动会比赛场地</h1>
+        <p class="text-lg md:text-xl text-shadow max-w-2xl mx-auto mb-2">网页制作人：两江南开初一（7）班+J老师</p>
+        <p class="text-xl md:text-2xl text-shadow max-w-2xl mx-auto animate-slide-up">探索田径比赛中的科学与技术</p>
+    </header>
+
+    <!-- 主要内容区 -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- 第一个板块：100米起跑线设置 -->
+            <section class="bg-white bg-opacity-90 rounded-lg shadow-lg p-6 card-hover cursor-pointer" onclick="openModal('modal1')">
+                <div class="flex items-center mb-4">
+                    <div class="bg-primary rounded-full p-3 mr-4">
+                        <i class="fa fa-flag text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-dark">100米起跑线设置</h2>
+                </div>
+                <p class="text-gray-700 mb-4">了解短跑跑比赛中起跑线的精确确设置和规则要求</p>
+                <div class="flex justify-end">
+                    <span class="text-primary font-semibold">点击查看详情 <i class="fa fa-arrow-right ml-1"></i></span>
+                </div>
+            </section>
+
+            <!-- 第二个板块：400米前伸数公式 -->
+            <section class="bg-white bg-opacity-90 rounded-lg shadow-lg p-6 card-hover cursor-pointer" onclick="openModal('modal2')">
+                <div class="flex items-center mb-4">
+                    <div class="bg-secondary rounded-full p-3 mr-4">
+                        <i class="fa fa-calculator text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-dark">400米前伸数公式</h2>
+                </div>
+                <p class="text-gray-700 mb-4">探索400米跑道上不同跑道间前伸数的计算方法</p>
+                <div class="flex justify-end">
+                    <span class="text-secondary font-semibold">点击查看详情 <i class="fa fa fa-arrow-right ml-1"></i></span>
+                </div>
+            </section>
+
+            <!-- 第三个板块：200米前伸数公式 -->
+            <section class="bg-white bg-opacity-90 rounded-lg shadow-lg p-6 card-hover cursor-pointer" onclick="openModal('modal3')">
+                <div class="flex items-center mb-4">
+                    <div class="bg-accent rounded-full p-3 mr-4">
+                        <i class="fa fa-line-chart text-white text-xl"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-dark">200米前伸数公式</h2>
+                </div>
+                <p class="text-gray-700 mb-4">了解200米比赛中各跑道起跑位置的科学计算</p>
+                <div class="flex justify-end">
+                    <span class="text-accent font-semibold">点击查看详情 <i class="fa fa-arrow-right ml-1"></i></span>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-overlay py-6 px-4 text-center mt-8">
+        <p class="text-lg">&copy; 2025 设计学校田径运动会比赛场地 - 田径知识探索</p>
+    </footer>
+
+    <!-- 模态框1：100米起跑线设置 -->
+    <div id="modal1" class="modal">
+        <div class="modal-content bg-white text-dark">
+            <span class="close-btn" onclick="closeModal('modal1')">&times;</span>
+            <h2 class="text-3xl font-bold mb-6 text-primary">100米起跑线线设置</h2>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">标准设置</h3>
+                <p class="mb-4">100米赛跑跑是在标准田径场的直线跑道跑道上进行的，所有参赛选手都在同一条起跑线上出发。</p>
+                
+                <h4 class="text-lg font-semibold mb-2">起跑线线组成成部分：</h4>
+                <ul class="list-disc pl-6 mb-4">
+                    <li>起跑线线：宽5厘米的白色线，标记比赛开始位置</li>
+                    <li>起跑器：每个跑道配备的可调节起跑装置</li>
+                    <li>预跑线：起跑线后3米处的虚线，提醒选手选手不要越线</li>
+                    <li>分道线：分隔不同跑道的白色线条</li>
+                </ul>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">跑道规格：</h4>
+                    <ul class="list-disc pl-6">
+                        <li>每条跑道宽度：1.22米至1.25米</li>
+                        <li>跑道总宽度：8至10条跑道</li>
+                        <li>起跑线至终点线距离：精确100米</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">起跑线示意图</h3>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="flex flex-col">
+                        <div class="track-lane bg-blue-100">
+                            <div class="start-line" style="left: 0;"></div>
+                            <div class="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs">跑道1</div>
+                        </div>
+                        <div class="track-lane bg-blue-100">
+                            <div class="start-line" style="left: 0;"></div>
+                            <div class="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs">跑道2</div>
+                        </div>
+                        <div class="track-lane bg-blue-100">
+                            <div class="start-line" style="left: 0;"></div>
+                            <div class="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs">跑道3</div>
+                        </div>
+                        <div class="track-lane bg-blue-100">
+                            <div class="start-line" style="left: 0;"></div>
+                            <div class="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs">跑道4</div>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-center text-sm text-gray-600">所有跑道的起跑线位于同一垂直线上</div>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-xl font-semibold mb-3">规则与注意事项</h3>
+                <ul class="list-disc pl-6">
+                    <li>选手必须在自己的跑道内完成比赛</li>
+                    <li>抢跑一次将被警告，抢跑两次将被取消比赛资格</li>
+                    <li>起跑器必须固定在地面上，不得移动</li>
+                    <li>选手的脚必须放在起跑器上，不得踩在起跑线上</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框2：400米前伸数公式 -->
+    <div id="modal2" class="modal">
+        <div class="modal-content bg-white text-dark">
+            <span class="close-btn" onclick="closeModal('modal2')">&times;</span>
+            <h2 class="text-3xl font-bold mb-6 text-secondary">400米前伸数公式</h2>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">什么是前伸数？</h3>
+                <p class="mb-4">在环形跑道比赛中，由于外跑道的半径大于内跑道，为了保证所有选手跑相同的距离，外跑道的起跑线必须向前移动一定的距离，这个距离就是前伸数。</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">400米前伸数计算公式：</h4>
+                    <p class="formula text-center text-xl mb-2">前伸数 = 2π × (跑道宽度 × (道次 - 1))</p>
+                    <p class="text-sm text-center text-gray-600">其中，π取3.1415926535，跑道宽度通常为1.22米</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">前伸数计算示例</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b border-gray-200 bg-gray-100">道次</th>
+                                <th class="py-2 px-4 border-b border-gray-200 bg-gray-100">半径增加量(米)</th>
+                                <th class="py-2 px-4 border-b border-gray-200 bg-gray-100">前伸数(米)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">1</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">0.00</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">2</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">1.22</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">7.67</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">3</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">2.44</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">15.34</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">4</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">3.66</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">23.00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">5</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">4.88</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">30.67</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">6</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">6.10</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">38.33</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">7</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">7.32</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">46.00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">8</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">8.54</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">53.66</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-xl font-semibold mb-3">400米起跑线示意图</h3>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="flex flex-col">
+                        <div class="track-lane bg-green-100">
+                            <div class="start-line" style="left: 0;"></div>
+                            <div class="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs">跑道1</div>
+                        </div>
+                        <div class="track-lane bg-green-100">
+                            <div class="start-line" style="left: 7.67%;"></div>
+                            <div class="absolute left-[7.67%] top-1/2 transform -translate-y-1/2 text-xs">跑道2</div>
+                        </div>
+                        <div class="track-lane bg-green-100">
+                            <div class="start-line" style="left: 15.34%;"></div>
+                            <div class="absolute left-[15.34%] top-1/2 transform -translate-y-1/2 text-xs">跑道3</div>
+                        </div>
+                        <div class="track-lane bg-green-100">
+                            <div class="start-line" style="left: 23.00%;"></div>
+                            <div class="absolute left-[23.00%] top-1/2 transform -translate-y-1/2 text-xs">跑道4</div>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-center text-sm text-gray-600">外跑道的起跑线依次向前延伸</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框3：200米前伸数公式 -->
+    <div id="modal3" class="modal">
+        <div class="modal-content bg-white text-dark">
+            <span class="close-btn" onclick="closeModal('modal3')">&times;</span>
+            <h2 class="text-3xl font-bold mb-6 text-accent">200米前伸数公式</h2>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">200米前伸数特点</h3>
+                <p class="mb-4">200米赛跑通常在标准田径场的半圈跑道上进行，由于只跑半圈，其前伸数是400米前伸数的一半。</p>
+                
+                <div class="bg-gray-100 p-4 rounded-lg mb-4">
+                    <h4 class="font-semibold mb-2">200米前伸数计算公式：</h4>
+                    <p class="formula text-center text-xl mb-2">前伸数 = π × (跑道宽度 × (道次 - 1))</p>
+                    <p class="text-sm text-center text-gray-600">其中，π取3.1415926535，跑道宽度通常为1.22米</p>
+                </div>
+            </div>
+            
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold mb-3">前伸数计算示例</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead>
+                            <tr>
+                                <th class="py-2 px-4 border-b border-gray-200 bg-gray-100">道次</th>
+                                <th class="py-2 px-4 border-b border-gray-200 bg-gray-100">半径增加量(米)</th>
+                                <th class="py-2 px-4 border-b border-gray-200 bg-gray-100">前伸数(米)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">1</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">0.00</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">0.00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">2</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">1.22</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">3.83</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">3</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">2.44</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">7.67</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">4</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">3.66</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">11.50</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">5</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">4.88</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">15.33</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">6</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">6.10</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">19.17</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">7</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">7.32</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">23.00</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">8</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">8.54</td>
+                                <td class="py-2 px-4 border-b border-gray-200 text-center">26.83</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div>
+                <h3 class="text-xl font-semibold mb-3">200米起跑线示意图</h3>
+                <div class="bg-gray-100 p-4 rounded-lg">
+                    <div class="flex flex-col">
+                        <div class="track-lane bg-yellow-100">
+                            <div class="start-line" style="left: 0;"></div>
+                            <div class="absolute left-2 top-1/2 transform -translate-y-1/2 text-xs">跑道1</div>
+                        </div>
+                        <div class="track-lane bg-yellow-100">
+                            <div class="start-line" style="left: 3.83%;"></div>
+                            <div class="absolute left-[3.83%] top-1/2 transform -translate-y-1/2 text-xs">跑道2</div>
+                        </div>
+                        <div class="track-lane bg-yellow-100">
+                            <div class="start-line" style="left: 7.67%;"></div>
+                            <div class="absolute left-[7.67%] top-1/2 transform -translate-y-1/2 text-xs">跑道3</div>
+                        </div>
+                        <div class="track-lane bg-yellow-100">
+                            <div class="start-line" style="left: 11.50%;"></div>
+                            <div class="absolute left-[11.50%] top-1/2 transform -translate-y-1/2 text-xs">跑道4</div>
+                        </div>
+                    </div>
+                    <div class="mt-2 text-center text-sm text-gray-600">200米起跑线前伸数是400米的一半</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 音乐播放控制
+        document.addEventListener('DOMContentLoaded', function() {
+            const audio = document.getElementById('backgroundMusic');
+            
+            // 尝试播放音乐，处理浏览器自动播放限制
+            audio.play().catch(error => {
+                console.log('自动播放被阻止，需要用户交互后再播放:', error);
+                
+                // 添加点击事件监听器，用户点击页面后播放音乐
+                document.addEventListener('click', function playAudioOnClick() {
+                    audio.play();
+                    document.removeEventListener('click', playAudioOnClick);
+                }, { once: true });
+            });
+        });
+        
+        // 开场动画控制（只显示3、2、1）
+        document.addEventListener('DOMContentLoaded', function() {
+            const openingScreen = document.getElementById('opening-screen');
+            const countdown = document.getElementById('countdown');
+            const openingTitle = document.getElementById('opening-title');
+            const openingSubtitle = document.getElementById('opening-subtitle');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            
+            // 创建粒子效果
+            function createParticles() {
+                const particleCount = 50;
+                for (let i = 0; i < particleCount; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // 随机大小
+                    const size = Math.random() * 10 + 5;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // 随机位置
+                    const posX = Math.random() * 100;
+                    const posY = Math.random() * 100;
+                    particle.style.left = `${posX}%`;
+                    particle.style.top = `${posY}%`;
+                    
+                    // 随机动画延迟
+                    particle.style.animationDelay = `${Math.random() * 3}s`;
+                    
+                    // 随机透明度
+                    particle.style.opacity = Math.random() * 0.5 + 0.3;
+                    
+                    openingScreen.appendChild(particle);
+                }
+            }
+            
+            // 倒计时动画（只显示3、2、1）
+            function startCountdown() {
+                let count = 3;
+                showCount(count);
+                
+                const countInterval = setInterval(() => {
+                    count--;
+                    if (count < 1) {
+                        clearInterval(countInterval);
+                        countdown.style.display = 'none';
+                        showTitle();
+                    } else {
+                        showCount(count);
+                    }
+                }, 1000);
+            }
+            
+            // 显示单个倒计时数字并重置动画
+            function showCount(num) {
+                countdown.textContent = num;
+                countdown.style.animation = 'none';
+                countdown.offsetHeight;
+                countdown.style.animation = 'countdownAnimation 1s ease-in-out forwards';
+            }
+            
+            // 显示标题
+            function showTitle() {
+                openingTitle.style.opacity = '1';
+                openingTitle.style.transform = 'translateY(0)';
+                
+                openingSubtitle.style.opacity = '1';
+                openingSubtitle.style.transform = 'translateY(0)';
+                
+                scrollIndicator.style.opacity = '1';
+                
+                setTimeout(() => {
+                    openingScreen.style.opacity = '0';
+                    openingScreen.style.visibility = 'hidden';
+                }, 5000);
+            }
+            
+            // 点击跳过开场动画
+            openingScreen.addEventListener('click', () => {
+                openingScreen.style.opacity = '0';
+                openingScreen.style.visibility = 'hidden';
+            });
+            
+            // 开始动画
+            createParticles();
+            startCountdown();
+        });
+        
+        // 模态框控制
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // 点击模态框外部关闭
+        window.onclick = function(event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let i = 0; i < modals.length; i++) {
+                if (event.target == modals[i]) {
+                    modals[i].style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
